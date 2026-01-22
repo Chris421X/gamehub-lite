@@ -10,4 +10,25 @@
 +    <item type="id" name="tv_local_game_id" />
 +    <item type="id" name="ll_local_game_id_container" />
 +    <item type="id" name="btn_copy_local_game_id" />
++    <item type="id" name="rts_controls_container" />
++    <item type="id" name="btn_rts_gesture_settings" />
++    <item type="id" name="rts_gesture_tap_checkbox" />
++    <item type="id" name="rts_gesture_tap_spinner" />
++    <item type="id" name="rts_gesture_long_press_checkbox" />
++    <item type="id" name="rts_gesture_long_press_spinner" />
++    <item type="id" name="rts_gesture_double_tap_checkbox" />
++    <item type="id" name="rts_gesture_double_tap_spinner" />
++    <item type="id" name="rts_gesture_drag_checkbox" />
++    <item type="id" name="rts_gesture_drag_spinner" />
++    <item type="id" name="rts_gesture_pinch_checkbox" />
++    <item type="id" name="rts_gesture_pinch_spinner" />
++    <item type="id" name="rts_gesture_two_finger_drag_checkbox" />
++    <item type="id" name="rts_gesture_two_finger_drag_spinner" />
++    <item type="id" name="switch_rts_touch_controls" />
++    <item type="id" name="rts_action_option_left_click" />
++    <item type="id" name="rts_action_option_right_click" />
++    <item type="id" name="rts_action_option_double_left_click" />
++    <item type="id" name="rts_action_option_drag_left_click" />
++    <item type="id" name="rts_action_option_scroll_wheel" />
++    <item type="id" name="rts_action_option_middle_mouse" />
  </resources>

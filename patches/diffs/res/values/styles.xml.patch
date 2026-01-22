@@ -10,3 +10,25 @@
      <style name="ComboBox">
          <item name="android:textSize">@dimen/mw_14sp</item>
          <item name="android:ellipsize">end</item>
+@@ -3360,4 +3357,10 @@
+         <item name="materialCalendarStyle">@style/Theme.MaterialComponents.Light</item>
+         <item name="materialCalendarTheme">@style/Theme.MaterialComponents.Light</item>
+     </style>
++    <style name="RtsGestureConfigDialogTheme" parent="Theme.AppCompat.Dialog">
++        <item name="android:windowBackground">@android:color/transparent</item>
++        <item name="android:windowFrame">@null</item>
++        <item name="android:windowIsFloating">true</item>
++        <item name="android:windowNoTitle">true</item>
++    </style>
+ </resources>
+@@ -3360,4 +3357,10 @@
+         <item name="materialCalendarStyle">@style/Theme.MaterialComponents.Light</item>
+         <item name="materialCalendarTheme">@style/Theme.MaterialComponents.Light</item>
+     </style>
++    <style name="RtsGestureConfigDialogTheme" parent="Theme.AppCompat.Dialog">
++        <item name="android:windowBackground">@android:color/transparent</item>
++        <item name="android:windowFrame">@null</item>
++        <item name="android:windowIsFloating">true</item>
++        <item name="android:windowNoTitle">true</item>
++    </style>
+ </resources>
