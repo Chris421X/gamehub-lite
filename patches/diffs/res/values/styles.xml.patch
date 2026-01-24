@@ -1,34 +1,14 @@
+﻿diff --git a/res/values/styles.xml b/res/values/styles.xml
+index 142ace1f1..0fb233366 100644
 --- a/res/values/styles.xml
 +++ b/res/values/styles.xml
-@@ -3067,9 +3067,6 @@
-     <style name="CheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
-         <item name="android:textSize">@dimen/sp_16</item>
+@@ -7977,4 +7977,9 @@
+     <style name="xja_ShapeRadioButtonStyle" parent="@style/Widget.AppCompat.CompoundButton.RadioButton">
+         <item name="xja_shape_buttonDrawable">@drawable/xja_shape_view_placeholder</item>
      </style>
--    <style name="CloudProgressStyle" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
--        <item name="android:progressDrawable">@drawable/cloud_progress_bar_style</item>
--    </style>
-     <style name="ComboBox">
-         <item name="android:textSize">@dimen/mw_14sp</item>
-         <item name="android:ellipsize">end</item>
-@@ -3360,4 +3357,10 @@
-         <item name="materialCalendarStyle">@style/Theme.MaterialComponents.Light</item>
-         <item name="materialCalendarTheme">@style/Theme.MaterialComponents.Light</item>
-     </style>
-+    <style name="RtsGestureConfigDialogTheme" parent="Theme.AppCompat.Dialog">
-+        <item name="android:windowBackground">@android:color/transparent</item>
-+        <item name="android:windowFrame">@null</item>
-+        <item name="android:windowIsFloating">true</item>
-+        <item name="android:windowNoTitle">true</item>
-+    </style>
- </resources>
-@@ -3360,4 +3357,10 @@
-         <item name="materialCalendarStyle">@style/Theme.MaterialComponents.Light</item>
-         <item name="materialCalendarTheme">@style/Theme.MaterialComponents.Light</item>
-     </style>
-+    <style name="RtsGestureConfigDialogTheme" parent="Theme.AppCompat.Dialog">
-+        <item name="android:windowBackground">@android:color/transparent</item>
-+        <item name="android:windowFrame">@null</item>
-+        <item name="android:windowIsFloating">true</item>
-+        <item name="android:windowNoTitle">true</item>
++    <style name="RtsGestureConfigDialogTheme" parent="@style/_XPopup_TransparentDialog">
++        <item name="colorControlActivated">#ff3b82f6</item>
++        <item name="colorAccent">#ff3b82f6</item>
++        <item name="android:colorControlActivated">#ff3b82f6</item>
 +    </style>
  </resources>
