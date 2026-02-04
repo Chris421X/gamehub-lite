@@ -18,9 +18,38 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PATCHES_DIR="$SCRIPT_DIR/patches"
 WORK_DIR="$SCRIPT_DIR/work"
 OUTPUT_DIR="$SCRIPT_DIR/output"
-KEYSTORE="$SCRIPT_DIR/keystore/debug.keystore"
-KEYSTORE_PASS="android"
-KEY_ALIAS="androiddebugkey"
+
+# Keystore configuration (can be overridden via environment variables)
+KEYSTORE="${KEYSTORE:-$SCRIPT_DIR/keystore/debug.keystore}"
+KEYSTORE_PASS="${KEYSTORE_PASS:-android}"
+KEY_ALIAS="${KEY_ALIAS:-androiddebugkey}"
+
+# Release mode: set RELEASE=true to build all package variants
+RELEASE="${RELEASE:-false}"
+
+# Version for output filenames (extracted from apktool.yml or set manually)
+VERSION="${VERSION:-}"
+
+# Base package name used in patches
+BASE_PACKAGE="gamehub.lite"
+
+# Variant definitions as space-separated pairs: "name:package"
+# Order matters for release builds
+VARIANTS="base:gamehub.lite antutu:com.antutu.ABenchMark alt-antutu:com.antutu.benchmark.full ludashi:com.ludashi.aibench pubg:com.tencent.ig"
+
+# Get package name for a variant
+get_variant_package() {
+    local variant="$1"
+    for pair in $VARIANTS; do
+        local name="${pair%%:*}"
+        local package="${pair#*:}"
+        if [ "$name" = "$variant" ]; then
+            echo "$package"
+            return 0
+        fi
+    done
+    echo ""
+}
 
 # Source APK (can be overridden)
 SOURCE_APK="${1:-$SCRIPT_DIR/apk/GameHub-5.1.0.apk}"
@@ -42,24 +71,85 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Extract version from apktool.yml after decompilation
+extract_version() {
+    if [ -z "$VERSION" ] && [ -f "$WORK_DIR/decompiled/apktool.yml" ]; then
+        # Format is "  versionName: 5.1.0" or "  versionName: '5.1.0'"
+        VERSION=$(grep "versionName:" "$WORK_DIR/decompiled/apktool.yml" | head -1 | awk -F': ' '{print $2}' | tr -d "'" | tr -d ' ')
+    fi
+    # Default fallback
+    VERSION="${VERSION:-5.1.0}"
+    print_success "Version: $VERSION"
+}
+
+# Replace package name in AndroidManifest.xml for a variant
+replace_package_name() {
+    local target_package="$1"
+    local manifest="$WORK_DIR/decompiled/AndroidManifest.xml"
+
+    if [ "$target_package" = "$BASE_PACKAGE" ]; then
+        return 0
+    fi
+
+    print_step "Replacing package name: $BASE_PACKAGE -> $target_package"
+
+    # Replace all occurrences of base package with target package
+    # This handles:
+    # - package="gamehub.lite"
+    # - android:authorities="gamehub.lite.xxx"
+    # - android:name="gamehub.lite.xxx"
+    # - action android:name="gamehub.lite.xxx"
+    sed -i.bak "s/${BASE_PACKAGE}/${target_package}/g" "$manifest"
+    rm -f "$manifest.bak"
+
+    print_success "Package name replaced"
+}
+
+# Restore original AndroidManifest.xml from backup
+restore_manifest() {
+    if [ -f "$WORK_DIR/decompiled/AndroidManifest.xml.original" ]; then
+        cp "$WORK_DIR/decompiled/AndroidManifest.xml.original" "$WORK_DIR/decompiled/AndroidManifest.xml"
+    fi
+}
+
+# Backup original AndroidManifest.xml
+backup_manifest() {
+    cp "$WORK_DIR/decompiled/AndroidManifest.xml" "$WORK_DIR/decompiled/AndroidManifest.xml.original"
+}
+
+# Get output filename for a variant
+get_output_filename() {
+    local variant="$1"
+
+    if [ "$variant" = "base" ]; then
+        if [ "$RELEASE" = "true" ]; then
+            echo "$OUTPUT_DIR/GameHub-Lite-v${VERSION}.apk"
+        else
+            echo "$OUTPUT_DIR/GameHub-Lite.apk"
+        fi
+    else
+        echo "$OUTPUT_DIR/GameHub-Lite-v${VERSION}-${variant}.apk"
+    fi
+}
+
 check_dependencies() {
     print_step "Checking dependencies..."
 
     local missing=()
 
-    if ! command -v apktool &> /dev/null; then
+    if ! command -v apktool &>/dev/null; then
         missing+=("apktool")
     fi
 
-    if ! command -v java &> /dev/null; then
+    if ! command -v java &>/dev/null; then
         missing+=("java")
     fi
 
-    if ! command -v zipalign &> /dev/null && ! command -v "$ANDROID_HOME/build-tools/"*/zipalign &> /dev/null; then
+    if ! command -v zipalign &>/dev/null && ! command -v "$ANDROID_HOME/build-tools/"*/zipalign &>/dev/null; then
         print_warning "zipalign not found - APK may not be optimized"
     fi
 
-    if ! command -v apksigner &> /dev/null && ! command -v jarsigner &> /dev/null; then
+    if ! command -v apksigner &>/dev/null && ! command -v jarsigner &>/dev/null; then
         missing+=("apksigner or jarsigner")
     fi
 
@@ -88,17 +178,28 @@ verify_source_apk() {
 
     # Calculate MD5 of source APK
     local md5
-    if command -v md5sum &> /dev/null; then
+    if command -v md5sum &>/dev/null; then
         md5=$(md5sum "$SOURCE_APK" | awk '{print $1}')
     else
         md5=$(md5 -q "$SOURCE_APK")
     fi
 
     # Expected MD5 for GameHub 5.1.0
-    local expected_md5="f7c2e5a1b3d4e6f8a9b0c1d2e3f4a5b6"  # Replace with actual MD5
+    local expected_md5="42db81116bf3c74e52e6f6afb4ec9f91" # Replace with actual MD5 if you are intentionally using a different APK
 
     print_success "Source APK found: $(basename "$SOURCE_APK")"
     echo "         MD5: $md5"
+    if [ "$md5" != "$expected_md5" ]; then
+        print_warning "MD5 checksum does not match expected value."
+        print_warning "Proceeding may lead to unexpected results."
+        read -pr "Do you want to continue? (y/N): " choice
+        if [[ ! "$choice" =~ ^[Yy]$ ]]; then
+            print_error "Aborting."
+            exit 1
+        fi
+    else
+        print_success "MD5 checksum verified."
+    fi
 }
 
 setup_keystore() {
@@ -135,7 +236,7 @@ apply_deletions() {
     print_step "Removing telemetry and unnecessary files..."
 
     local count=0
-    local total=$(wc -l < "$PATCHES_DIR/files_to_delete.txt")
+    local total=$(wc -l <"$PATCHES_DIR/files_to_delete.txt")
 
     while IFS= read -r file; do
         target="$WORK_DIR/decompiled/$file"
@@ -143,7 +244,7 @@ apply_deletions() {
             rm -rf "$target"
             count=$((count + 1))
         fi
-    done < "$PATCHES_DIR/files_to_delete.txt"
+    done <"$PATCHES_DIR/files_to_delete.txt"
 
     print_success "Removed $count of $total files/directories"
 }
@@ -171,7 +272,7 @@ apply_patches() {
                 print_warning "Failed to patch: $file"
             fi
         fi
-    done < "$PATCHES_DIR/files_to_patch.txt"
+    done <"$PATCHES_DIR/files_to_patch.txt"
 
     if [ $failed -gt 0 ]; then
         print_warning "Applied $count patches, $failed failed"
@@ -227,7 +328,7 @@ align_apk() {
 
     local zipalign_cmd=""
 
-    if command -v zipalign &> /dev/null; then
+    if command -v zipalign &>/dev/null; then
         zipalign_cmd="zipalign"
     elif [ -n "$ANDROID_HOME" ]; then
         zipalign_cmd=$(find "$ANDROID_HOME/build-tools" -name "zipalign" | head -1)
@@ -243,13 +344,14 @@ align_apk() {
 }
 
 sign_apk() {
-    print_step "Signing APK..."
+    local target_apk="${1:-$OUTPUT_APK}"
+    print_step "Signing APK -> $(basename "$target_apk")"
 
-    if command -v apksigner &> /dev/null; then
+    if command -v apksigner &>/dev/null; then
         apksigner sign --ks "$KEYSTORE" \
             --ks-pass "pass:$KEYSTORE_PASS" \
             --ks-key-alias "$KEY_ALIAS" \
-            --out "$OUTPUT_APK" \
+            --out "$target_apk" \
             "$WORK_DIR/unsigned.apk"
     elif [ -n "$ANDROID_HOME" ]; then
         local apksigner_cmd=$(find "$ANDROID_HOME/build-tools" -name "apksigner" | head -1)
@@ -257,14 +359,14 @@ sign_apk() {
             "$apksigner_cmd" sign --ks "$KEYSTORE" \
                 --ks-pass "pass:$KEYSTORE_PASS" \
                 --ks-key-alias "$KEY_ALIAS" \
-                --out "$OUTPUT_APK" \
+                --out "$target_apk" \
                 "$WORK_DIR/unsigned.apk"
         else
             jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
                 -keystore "$KEYSTORE" \
                 -storepass "$KEYSTORE_PASS" \
                 -keypass "$KEYSTORE_PASS" \
-                -signedjar "$OUTPUT_APK" \
+                -signedjar "$target_apk" \
                 "$WORK_DIR/unsigned.apk" "$KEY_ALIAS"
         fi
     else
@@ -272,16 +374,45 @@ sign_apk() {
             -keystore "$KEYSTORE" \
             -storepass "$KEYSTORE_PASS" \
             -keypass "$KEYSTORE_PASS" \
-            -signedjar "$OUTPUT_APK" \
+            -signedjar "$target_apk" \
             "$WORK_DIR/unsigned.apk" "$KEY_ALIAS" 2>&1 | tail -3
     fi
 
-    print_success "APK signed"
+    print_success "APK signed: $(basename "$target_apk")"
+}
+
+# Build a single variant
+build_variant() {
+    local variant="$1"
+    local package=$(get_variant_package "$variant")
+    local output_apk=$(get_output_filename "$variant")
+
+    echo ""
+    echo -e "${BLUE}--- Building variant: $variant (package: $package) ---${NC}"
+
+    # Restore manifest and replace package if not base
+    restore_manifest
+    replace_package_name "$package"
+
+    # Rebuild
+    rebuild_apk
+    align_apk
+    sign_apk "$output_apk"
+
+    # Track built APKs (newline separated)
+    if [ -z "$BUILT_APKS" ]; then
+        BUILT_APKS="$output_apk"
+    else
+        BUILT_APKS="$BUILT_APKS
+$output_apk"
+    fi
 }
 
 cleanup() {
     print_step "Cleaning up..."
     rm -rf "$WORK_DIR"
+    # Remove .idsig files (APK Signature Scheme v4) - not needed for distribution
+    rm -f "$OUTPUT_DIR"/*.idsig
     print_success "Cleanup complete"
 }
 
@@ -291,13 +422,32 @@ show_result() {
     echo -e "${GREEN}  GameHub Lite build complete!${NC}"
     echo -e "${GREEN}========================================${NC}"
     echo ""
-    echo "Output APK: $OUTPUT_APK"
-    echo "Size: $(du -h "$OUTPUT_APK" | cut -f1)"
-    echo ""
-    echo "Install on your device:"
-    echo "  adb install $OUTPUT_APK"
+
+    if [ "$RELEASE" = "true" ]; then
+        local count=$(echo "$BUILT_APKS" | wc -l | tr -d ' ')
+        echo "Built $count APK variant(s):"
+        echo ""
+        echo "$BUILT_APKS" | while IFS= read -r apk; do
+            if [ -n "$apk" ] && [ -f "$apk" ]; then
+                local pkg=$(aapt dump badging "$apk" 2>/dev/null | grep "package:" | awk -F"'" '{print $2}' || echo "unknown")
+                echo "  $(basename "$apk")"
+                echo "    Package: $pkg"
+                echo "    Size: $(du -h "$apk" | cut -f1)"
+                echo ""
+            fi
+        done
+    else
+        echo "Output APK: $OUTPUT_APK"
+        echo "Size: $(du -h "$OUTPUT_APK" | cut -f1)"
+        echo ""
+        echo "Install on your device:"
+        echo "  adb install $OUTPUT_APK"
+    fi
     echo ""
 }
+
+# String to track built APKs (newline-separated)
+BUILT_APKS=""
 
 main() {
     echo ""
@@ -306,17 +456,41 @@ main() {
     echo "====================================="
     echo ""
 
+    if [ "$RELEASE" = "true" ]; then
+        echo -e "${YELLOW}RELEASE MODE: Building all variants${NC}"
+        echo ""
+    fi
+
     check_dependencies
     verify_source_apk
     setup_keystore
     decompile_apk
+
+    # Extract version after decompilation
+    extract_version
+
     apply_deletions
     apply_patches
     apply_binary_replacements
     apply_additions
-    rebuild_apk
-    align_apk
-    sign_apk
+
+    if [ "$RELEASE" = "true" ]; then
+        # Backup manifest for variant builds
+        backup_manifest
+
+        # Build all variants (iterate over VARIANTS string)
+        for pair in $VARIANTS; do
+            local variant="${pair%%:*}"
+            build_variant "$variant"
+        done
+    else
+        # Standard single build
+        rebuild_apk
+        align_apk
+        sign_apk "$OUTPUT_APK"
+        BUILT_APKS="$OUTPUT_APK"
+    fi
+
     cleanup
     show_result
 }
