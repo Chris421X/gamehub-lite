@@ -170,7 +170,7 @@
      <public type="font" name="d_din_pro_600_semibold" id="0x7f090000" />
      <public type="font" name="roboto_medium_numbers" id="0x7f090001" />
      <public type="id" name="ALT" id="0x7f0a0000" />
-@@ -15317,6 +15276,12 @@
+@@ -15317,6 +15276,34 @@
      <public type="id" name="yesTv" id="0x7f0a0e77" />
      <public type="id" name="zh_bgImage" id="0x7f0a0e78" />
      <public type="id" name="zoom" id="0x7f0a0e79" />
@@ -180,10 +180,32 @@
 +    <public type="id" name="tv_local_game_id" id="0x7f0a0e7d" />
 +    <public type="id" name="ll_local_game_id_container" id="0x7f0a0e7e" />
 +    <public type="id" name="btn_copy_local_game_id" id="0x7f0a0e7f" />
++    <public type="id" name="switch_rts_touch_controls" id="0x7f0a0e80" />
++    <public type="id" name="rts_controls_container" id="0x7f0a0e81" />
++    <public type="id" name="btn_rts_gesture_settings" id="0x7f0a0e82" />
++    <public type="id" name="rts_gesture_tap_checkbox" id="0x7f0a0e83" />
++    <public type="id" name="rts_gesture_long_press_checkbox" id="0x7f0a0e84" />
++    <public type="id" name="rts_gesture_double_tap_checkbox" id="0x7f0a0e85" />
++    <public type="id" name="rts_gesture_drag_checkbox" id="0x7f0a0e86" />
++    <public type="id" name="rts_gesture_pinch_checkbox" id="0x7f0a0e87" />
++    <public type="id" name="rts_gesture_pinch_spinner" id="0x7f0a0e88" />
++    <public type="id" name="rts_gesture_two_finger_checkbox" id="0x7f0a0e89" />
++    <public type="id" name="rts_gesture_two_finger_spinner" id="0x7f0a0e8a" />
++    <public type="id" name="btnClose" id="0x7f0a0e8b" />
++    <public type="id" name="tvClose" id="0x7f0a0e8c" />
++    <public type="id" name="rts_action_option_0" id="0x7f0a0e90" />
++    <public type="id" name="rts_action_option_0_text" id="0x7f0a0e91" />
++    <public type="id" name="rts_action_option_0_check" id="0x7f0a0e92" />
++    <public type="id" name="rts_action_option_1" id="0x7f0a0e93" />
++    <public type="id" name="rts_action_option_1_text" id="0x7f0a0e94" />
++    <public type="id" name="rts_action_option_1_check" id="0x7f0a0e95" />
++    <public type="id" name="rts_action_option_2" id="0x7f0a0e96" />
++    <public type="id" name="rts_action_option_2_text" id="0x7f0a0e97" />
++    <public type="id" name="rts_action_option_2_check" id="0x7f0a0e98" />
      <public type="integer" name="abc_config_activityDefaultDur" id="0x7f0b0000" />
      <public type="integer" name="abc_config_activityShortDur" id="0x7f0b0001" />
      <public type="integer" name="app_bar_elevation_anim_duration" id="0x7f0b0002" />
-@@ -15507,7 +15472,7 @@
+@@ -15507,7 +15494,7 @@
      <public type="layout" name="browser_actions_context_menu_page" id="0x7f0d0057" />
      <public type="layout" name="browser_actions_context_menu_row" id="0x7f0d0058" />
      <public type="layout" name="btns_keyboard_menu_btns" id="0x7f0d0059" />
@@ -192,7 +214,7 @@
      <public type="layout" name="bussiness_dialog_config_setting_view" id="0x7f0d005b" />
      <public type="layout" name="bussiness_item_language" id="0x7f0d005c" />
      <public type="layout" name="bussiness_item_region" id="0x7f0d005d" />
-@@ -15526,21 +15491,6 @@
+@@ -15526,21 +15513,6 @@
      <public type="layout" name="cast_tracks_chooser_dialog_layout" id="0x7f0d006a" />
      <public type="layout" name="cast_tracks_chooser_dialog_row_layout" id="0x7f0d006b" />
      <public type="layout" name="category_text_view" id="0x7f0d006c" />
@@ -214,7 +236,7 @@
      <public type="layout" name="comm_activity_web" id="0x7f0d007c" />
      <public type="layout" name="comm_adapter_item_pic_selector" id="0x7f0d007d" />
      <public type="layout" name="comm_adapter_menu_item" id="0x7f0d007e" />
-@@ -16193,7 +16143,6 @@
+@@ -16193,7 +16165,6 @@
      <public type="layout" name="notification_template_part_time" id="0x7f0d0305" />
      <public type="layout" name="number_picker" id="0x7f0d0306" />
      <public type="layout" name="pay_adapter_goods_item" id="0x7f0d0307" />
@@ -222,7 +244,7 @@
      <public type="layout" name="pay_main_button_layout" id="0x7f0d0309" />
      <public type="layout" name="pay_popup_focus" id="0x7f0d030a" />
      <public type="layout" name="pay_popup_hint" id="0x7f0d030b" />
-@@ -16424,7 +16373,6 @@
+@@ -16424,7 +16395,6 @@
      <public type="layout" name="winemu_view_game_pad_connect_tips" id="0x7f0d03ec" />
      <public type="layout" name="winemu_view_menu_button" id="0x7f0d03ed" />
      <public type="layout" name="winemu_view_setting_collapse_menu" id="0x7f0d03ee" />
@@ -230,7 +252,7 @@
      <public type="layout" name="xja_activity_adb_activation" id="0x7f0d03f0" />
      <public type="layout" name="xja_activity_adb_activation_success" id="0x7f0d03f1" />
      <public type="layout" name="xja_activity_developer_options" id="0x7f0d03f2" />
-@@ -16462,7 +16410,7 @@
+@@ -16462,7 +16432,7 @@
      <public type="mipmap" name="ic_pc_scut_foreground" id="0x7f100015" />
      <public type="mipmap" name="ic_reply_add" id="0x7f100016" />
      <public type="mipmap" name="ic_reply_post" id="0x7f100017" />
@@ -239,7 +261,7 @@
      <public type="mipmap" name="llauncher_icon_battery_level_1" id="0x7f100019" />
      <public type="mipmap" name="llauncher_icon_battery_level_2" id="0x7f10001a" />
      <public type="mipmap" name="llauncher_icon_battery_level_3" id="0x7f10001b" />
-@@ -16479,6 +16427,7 @@
+@@ -16479,6 +16449,7 @@
      <public type="mipmap" name="pay_popup_close_gry" id="0x7f100026" />
      <public type="mipmap" name="pay_wx" id="0x7f100027" />
      <public type="mipmap" name="pay_zfb" id="0x7f100028" />
@@ -247,7 +269,7 @@
      <public type="plurals" name="exo_controls_fastforward_by_amount_description" id="0x7f110000" />
      <public type="plurals" name="exo_controls_rewind_by_amount_description" id="0x7f110001" />
      <public type="plurals" name="mtrl_badge_content_description" id="0x7f110002" />
-@@ -20313,7 +20262,6 @@
+@@ -20313,7 +20284,6 @@
      <public type="style" name="CastIntroOverlay" id="0x7f140135" />
      <public type="style" name="CastMiniController" id="0x7f140136" />
      <public type="style" name="CheckBox" id="0x7f140137" />
