@@ -252,7 +252,16 @@
      <public type="layout" name="xja_activity_adb_activation" id="0x7f0d03f0" />
      <public type="layout" name="xja_activity_adb_activation_success" id="0x7f0d03f1" />
      <public type="layout" name="xja_activity_developer_options" id="0x7f0d03f2" />
-@@ -16462,7 +16432,7 @@
+@@ -16435,6 +16405,8 @@
+     <public type="layout" name="xja_window_adb_activation" id="0x7f0d03f7" />
+     <public type="layout" name="xja_window_hint" id="0x7f0d03f8" />
+     <public type="layout" name="zxl_camera_scan" id="0x7f0d03f9" />
++    <public type="layout" name="rts_gesture_config_dialog" id="0x7f0d0400" />
++    <public type="layout" name="rts_action_picker_dialog" id="0x7f0d0401" />
+     <public type="menu" name="display_host" id="0x7f0f0000" />
+     <public type="menu" name="main" id="0x7f0f0001" />
+     <public type="menu" name="ucrop_menu_activity" id="0x7f0f0002" />
+@@ -16462,7 +16434,7 @@
      <public type="mipmap" name="ic_pc_scut_foreground" id="0x7f100015" />
      <public type="mipmap" name="ic_reply_add" id="0x7f100016" />
      <public type="mipmap" name="ic_reply_post" id="0x7f100017" />
@@ -261,7 +270,7 @@
      <public type="mipmap" name="llauncher_icon_battery_level_1" id="0x7f100019" />
      <public type="mipmap" name="llauncher_icon_battery_level_2" id="0x7f10001a" />
      <public type="mipmap" name="llauncher_icon_battery_level_3" id="0x7f10001b" />
-@@ -16479,6 +16449,7 @@
+@@ -16479,6 +16451,7 @@
      <public type="mipmap" name="pay_popup_close_gry" id="0x7f100026" />
      <public type="mipmap" name="pay_wx" id="0x7f100027" />
      <public type="mipmap" name="pay_zfb" id="0x7f100028" />
@@ -269,7 +278,7 @@
      <public type="plurals" name="exo_controls_fastforward_by_amount_description" id="0x7f110000" />
      <public type="plurals" name="exo_controls_rewind_by_amount_description" id="0x7f110001" />
      <public type="plurals" name="mtrl_badge_content_description" id="0x7f110002" />
-@@ -20313,7 +20284,6 @@
+@@ -20313,7 +20286,6 @@
      <public type="style" name="CastIntroOverlay" id="0x7f140135" />
      <public type="style" name="CastMiniController" id="0x7f140136" />
      <public type="style" name="CheckBox" id="0x7f140137" />
