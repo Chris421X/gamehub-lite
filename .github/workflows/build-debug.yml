@@ -8,11 +8,13 @@ on:
       - 'patches/**'
       - 'patch.sh'
       - 'generate-patches.sh'
+      - '.github/workflows/build-debug.yml'
   pull_request:
     paths:
       - 'patches/**'
       - 'patch.sh'
       - 'generate-patches.sh'
+      - '.github/workflows/build-debug.yml'
 
 env:
   SOURCE_APK_URL: https://github.com/Producdevity/gamehub-lite/releases/download/v5.1.0-patch/GameHub-5.1.0.apk
