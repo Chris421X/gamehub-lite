@@ -20,3 +20,5 @@ output/*.idsig
 
 # temp
 patches/stats.txt
+
+*.jar
