@@ -59,14 +59,15 @@ stop using windows
 
 2. Run the patcher:
 
-   ```bash
-   ./patch.sh
-   ```
+```bash
+./patch.sh
+```
 
 3. Install the output APK:
-   ```bash
-   adb install output/GameHub-Lite.apk
-   ```
+
+```bash
+adb install output/GameHub-Lite.apk
+```
 
 #### How to use your custom keystore
 
@@ -74,19 +75,19 @@ By default the patch generates a debug keystore for you,
 but you can override the keystore settings using environment variables:
 
 ```bash
-  KEYSTORE="./keystore/release.keystore" \
-  KEYSTORE_PASS="your_password" \
-  KEY_ALIAS="your_key_alias" \
-  ./patch.sh
+KEYSTORE="./keystore/release.keystore" \
+KEYSTORE_PASS="your_password" \
+KEY_ALIAS="your_key_alias" \
+./patch.sh
 ```
 
 Or export them first:
 
 ```bash
-  export KEYSTORE="./keystore/release.keystore"
-  export KEYSTORE_PASS="your_password"
-  export KEY_ALIAS="your_key_alias"
-  ./patch.sh
+export KEYSTORE="./keystore/release.keystore"
+export KEYSTORE_PASS="your_password"
+export KEY_ALIAS="your_key_alias"
+./patch.sh
 ```
 
 To find your key alias, run:
@@ -111,13 +112,13 @@ KEY_ALIAS="your_key_alias" \
 
 This will generate the following APKs in the `output/` directory:
 
-| Variant | Filename | Package Name |
-|---------|----------|--------------|
-| Base | `GameHub-Lite-v{VERSION}.apk` | `gamehub.lite` |
-| AnTuTu | `GameHub-Lite-v{VERSION}-antutu.apk` | `com.antutu.ABenchMark` |
+| Variant    | Filename                                 | Package Name                |
+| ---------- | ---------------------------------------- | --------------------------- |
+| Base       | `GameHub-Lite-v{VERSION}.apk`            | `gamehub.lite`              |
+| AnTuTu     | `GameHub-Lite-v{VERSION}-antutu.apk`     | `com.antutu.ABenchMark`     |
 | Alt-AnTuTu | `GameHub-Lite-v{VERSION}-alt-antutu.apk` | `com.antutu.benchmark.full` |
-| Ludashi | `GameHub-Lite-v{VERSION}-ludashi.apk` | `com.ludashi.aibench` |
-| PUBG | `GameHub-Lite-v{VERSION}-pubg.apk` | `com.tencent.ig` |
+| Ludashi    | `GameHub-Lite-v{VERSION}-ludashi.apk`    | `com.ludashi.aibench`       |
+| PUBG       | `GameHub-Lite-v{VERSION}-pubg.apk`       | `com.tencent.ig`            |
 
 The version number is automatically extracted from the source APK.
 
