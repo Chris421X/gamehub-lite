@@ -280,17 +280,17 @@ apply_patches() {
         print_success "Applied $count patches successfully"
     fi
 
-    # Clean up .orig backup files created by patch when applying with fuzz/offset.
-    # macOS patch creates these automatically and aapt2 will fail if it finds
-    # non-resource files (like .orig) inside res/ during compilation.
+    # Clean up .orig and .rej files created by patch command.
+    # macOS patch creates .orig automatically; failed patches leave .rej files.
+    # aapt2 will fail if it finds non-resource files (like .orig/.rej) inside res/.
     local orig_count=0
     while IFS= read -r -d '' orig_file; do
         rm -f "$orig_file"
         orig_count=$((orig_count + 1))
-    done < <(find "$WORK_DIR/decompiled" -name '*.orig' -print0 2>/dev/null)
+    done < <(find "$WORK_DIR/decompiled" -type f \( -name '*.orig' -o -name '*.rej' \) -print0 2>/dev/null)
 
     if [ $orig_count -gt 0 ]; then
-        print_warning "Cleaned up $orig_count .orig backup file(s) from fuzz-applied patches"
+        print_warning "Cleaned up $orig_count .orig/.rej file(s)"
     fi
 }
 
