@@ -1608,12 +1608,11 @@
     iget-object v1, v0, Lcom/winemu/openapi/WinUIBridge;->k:Lcom/winemu/core/controller/X11Controller;
     if-eqz v1, :cond_end
     
-    # Determine keycode: plus = 0x51 (81 = KEYCODE_NUMPAD_ADD), minus = 0x4e (78 = KEYCODE_MINUS)
-    # Actually using KEYCODE_EQUALS (70) with shift for plus, KEYCODE_MINUS (69) for minus
+    # Determine keycode: plus = KEYCODE_NUMPAD_ADD (157), minus = KEYCODE_MINUS (69)
     const/4 v2, 0x1
     if-ne p1, v2, :cond_minus
-    # Plus key (KEYCODE_EQUALS = 70 in Android, will map to = which often is +)
-    const/16 v2, 0x46  # 70 = KEYCODE_EQUALS
+    # Plus key (KEYCODE_NUMPAD_ADD = 157, always emits +)
+    const/16 v2, 0x9d  # 157 = KEYCODE_NUMPAD_ADD
     goto :cond_send
     
     :cond_minus
